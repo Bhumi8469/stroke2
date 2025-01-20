@@ -131,6 +131,8 @@ smoking_status = case_when(
    report_file <- "~/Desktop/validation_report.docx"
 save_as_docx(ft, path = report_file) # Save report as a Word document
   }
+
+
  
 
 
