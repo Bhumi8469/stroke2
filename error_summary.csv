@@ -1,0 +1,24 @@
+name,items,passes,fails,nNA,error,warning,expression
+V01,5110,5110,0,0,FALSE,FALSE,is_unique(id)
+V02,5110,5110,0,0,FALSE,FALSE,!is.na(gender)
+V03,5110,5110,0,0,FALSE,FALSE,"gender %vin% c(1, 2, 9)"
+V04,5110,5110,0,0,FALSE,FALSE,!is.na(age)
+V05,5110,5110,0,0,FALSE,FALSE,age - 0 >= -1e-08 & age - 120 <= 1e-08
+V06,5110,5110,0,0,FALSE,FALSE,!is.na(hypertension)
+V07,5110,5110,0,0,FALSE,FALSE,"hypertension %vin% c(0, 1)"
+V08,5110,5110,0,0,FALSE,FALSE,!is.na(heart_disease)
+V09,5110,5110,0,0,FALSE,FALSE,"heart_disease %vin% c(0, 1)"
+V10,5110,5110,0,0,FALSE,FALSE,!is.na(ever_married)
+V11,5110,5110,0,0,FALSE,FALSE,"ever_married %vin% c(1, 2)"
+V12,5110,5110,0,0,FALSE,FALSE,!is.na(work_type)
+V13,5110,5110,0,0,FALSE,FALSE,work_type %vin% 0:4
+V14,5110,5110,0,0,FALSE,FALSE,!is.na(Residence_type)
+V15,5110,5110,0,0,FALSE,FALSE,"Residence_type %vin% c(1, 2)"
+V16,5110,5110,0,0,FALSE,FALSE,!is.na(avg_glucose_level)
+V17,5110,5110,0,0,FALSE,FALSE,avg_glucose_level > 0
+V18,5110,5110,0,0,FALSE,FALSE,!is.na(bmi)
+V19,5110,0,0,5110,FALSE,TRUE,bmi >= 18.5 & bmi <= 40
+V20,5110,3566,1544,0,FALSE,FALSE,!is.na(smoking_status)
+V21,5110,3566,0,1544,FALSE,FALSE,smoking_status %vin% 0:3
+V22,5110,5110,0,0,FALSE,FALSE,!is.na(stroke)
+V23,5110,5110,0,0,FALSE,FALSE,"stroke %vin% c(0, 1)"

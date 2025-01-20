@@ -1,0 +1,138 @@
+---
+title: "day1-stroke"
+Author: Bhumi
+date: 19/1/2024
+---
+
+```{r}
+clean_and_validate <- function(/Users/Bhaumik/Desktop/day1-stroke, /Users/Bhaumik/Desktop/day1-stroke, output_validation_file, report_file = NULL) {
+  
+#setting up working directory
+ getwd()
+ 
+#Install packages
+ install.packages("tidyverse")
+ install.packages("dplyr")
+ install.packages("validate")
+ install.packages("flextable")
+ library(tidyverse)
+ library(dplyr)
+ library(validate)
+ library(flextable)
+ 
+#1.Importing dataset
+ 
+ hw1 <- read.csv("healthcare-dataset-stroke-data.csv", stringsAsFactors = TRUE)
+ 
+#2.overview of dataset
+ 
+ view(hw1)
+ glimpse(hw1)
+ 
+#3. Cleaning the dataset
+ #3.1 - reformating all the variables
+ 
+ #3.2 - checking on inconsistency value
+ 
+ summary(hw1) #id-needs to arrange in sequence, gender - male-1,female-2,other-9               , ever_married - 1 n0, 2-yes , work_type: 0-children, 1-Govt.job, 2-private job, 3-self_emplyed, 4-never_work, Residence_type : 1-rural, 2-urban, smoking_status: formerly smoked: 1, smokes:2, neversmoked:3, Unknown needs to turn into N.A
+ 
+ #3.3 - Recording the variable
+ 
+ hw11 <- hw1 %>% 
+   arrange(id) %>% 
+   mutate(gender = case_when(
+  gender == "Male" ~ 1,       # Assign 1 if gender is "male"
+  gender == "Female" ~ 2,     # Assign 2 if gender is "female"
+  gender == "Other" ~ 9),       # Assign 9 if gender is "other"
+ever_married = case_when(
+  ever_married == "No" ~ 1,
+  ever_married == "Yes"~ 2),
+work_type = case_when(
+  work_type == "children" ~ 0,
+  work_type == "Govt_job" ~ 1,
+  work_type == "Private" ~ 2,
+  work_type == "Self-employed" ~3,
+  work_type == "Never_worked" ~4), 
+Residence_type = case_when(
+  Residence_type == "Rural" ~ 1,
+  Residence_type == "Urban" ~ 2), 
+smoking_status = case_when(
+  smoking_status == "formerly smoked" ~ 1,
+  smoking_status == "smokes" ~ 2,
+  smoking_status == "never smoked" ~ 3,
+  smoking_status == "Unknown" ~ NA_integer_))
+ 
+ view(hw11)
+ str(hw11)
+ unique(hw11$gender)
+ 
+ #4. validation script
+ 
+ #4.1 - Define Validation Rules
+ 
+ Myrules <- validator(
+  is_unique(id),                              # Ensure `id` is unique
+  !is.na(gender),                             # Gender must not be missing
+  gender %in% c(1, 2, 9),                     # Gender must be one of 1, 2, or 9
+  !is.na(age),                                # Age must not be missing
+  age >= 0 & age <= 120,                      # Age must be within a valid range
+  !is.na(hypertension),                       # Hypertension must not be missing
+  hypertension %in% c(0, 1),                  # Hypertension must be 0 or 1
+  !is.na(heart_disease),                      # Heart disease must not be missing
+  heart_disease %in% c(0, 1),                 # Heart disease must be 0 or 1
+  !is.na(ever_married),                       # Ever married must not be missing
+  ever_married %in% c(1, 2),                  # Ever married must be 1 or 2
+  !is.na(work_type),                          # Work type must not be missing
+  work_type %in% 0:4,                         # Work type must be between 0 and 4
+  !is.na(Residence_type),                     # Residence type must not be missing
+  Residence_type %in% c(1, 2),                # Residence type must be 1 or 2
+  !is.na(avg_glucose_level),                  # Average glucose level must not be missing
+  avg_glucose_level > 0,                      # Glucose level must be greater than 0
+  !is.na(bmi),                                # BMI must not be missing
+  bmi >= 18.5 & bmi <= 40,                    # BMI must be within a reasonable range
+  !is.na(smoking_status),                     # Smoking status must not be missing
+  smoking_status %in% 0:3,                    # Smoking status must be between 0 and 3
+  !is.na(stroke),                             # Stroke must not be missing
+  stroke %in% c(0, 1)                         # Stroke must be 0 or 1
+)
+
+#4.2 Apply validation rules
+ 
+ dError <- confront( hw11, Myrules)
+ error_summary <- summary(dError)
+ 
+#4.2 Define file path for saving validation results
+
+ validation_file <- "error_summary.csv"
+
+#4.3 save validation rules
+
+ write_csv(error_summary, validation_file)
+ 
+ 
+#5. Save cleaned data
+ output_file <- "hw11.csv"  # Replace with your desired file path
+  write.csv(hw11, output_file, row.names = FALSE)
+
+  # Return cleaned data and validation errors
+  list(hw11 = hw11, validation_errors = dError)
+}
+
+#6. Generate a Validation Report (Optional)
+  if (!is.null(Myrules)) {
+  ft <- flextable(as.data.frame(Myrules)) %>%
+    theme_box() %>%
+    set_header_labels(
+      name = "Error",
+      rule = "Validation Rule"  # Replace with actual column names
+    ) %>%
+    autofit() %>%
+    add_footer_lines("Validation results for dataset.")
+   report_file <- "~/Desktop/validation_report.docx"
+save_as_docx(ft, path = report_file) # Save report as a Word document
+  }
+ 
+
+
+
+```
