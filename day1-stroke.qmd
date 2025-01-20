@@ -5,7 +5,7 @@ date: 19/1/2024
 ---
 
 ```{r}
-clean_and_validate <- function(/Users/Bhaumik/Desktop/day1-stroke, /Users/Bhaumik/Desktop/day1-stroke, output_validation_file, report_file = NULL) {
+clean_and_validate <- function(input_file, output_clean_file, validation_file, report_file = NULL) {
   
 #setting up working directory
  getwd()
@@ -132,9 +132,17 @@ smoking_status = case_when(
 save_as_docx(ft, path = report_file) # Save report as a Word document
   }
 
+#7. create a report  
+  input_file <- "healthcare-dataset-stroke-data.csv"
+output_clean_file <- "hw11.csv"
+validation_file <- "validation_errors.csv"
+report_file <- "validation_report.txt"
 
- 
+# Call the function
+results <- clean_and_validate(input_file, output_clean_file, validation_file, report_file)
 
-
+# Access results
+print(results$cleaned_data)  # Cleaned data
+print(results$validation_results)  # Validation results
 
 ```
